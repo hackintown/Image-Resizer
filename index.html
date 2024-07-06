@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Image-Resizer</title>
+</head>
+<body>
+    <main class="container mx-auto">
+        <form id="upload-form" class="my-2">
+            <input type="file" id="image-input" accept="image/*">
+        </form>
+        <div id="image-container" class="my-2">
+            <img id="uploaded-image" src="#" alt="Uploaded Image">
+        </div>
+        <button id="resize-button-instagram" class="bg-indigo-500 text-white rounded-md px-2 py-1 text-sm">Instagram (1080x1080)</button>
+        <button id="resize-button-facebook" class="bg-indigo-500 text-white rounded-md px-2 py-1 text-sm">Facebook (1200x630)</button>
+        <button id="resize-button-twitter" class="bg-indigo-500 text-white rounded-md px-2 py-1 text-sm">Twitter (1200x675)</button>
+        <button id="resize-button-website" class="bg-indigo-500 text-white rounded-md px-2 py-1 text-sm">Website (600x300)</button>
+    </main>
+    <script>
+        document.getElementById('image-input').addEventListener('change', function () {
+            const imageContainer = document.getElementById('image-container');
+            const uploadedImage = document.getElementById('uploaded-image');
+            const file = this.files[0];
+    
+            if (file) {
+                const reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+                    imageContainer.style.display = 'block';
+                };
+    
+                reader.readAsDataURL(file);
+            } else {
+                imageContainer.style.display = 'none';
+            }
+        });
+    
+        document.getElementById('resize-button-instagram').addEventListener('click', function () {
+            resizeImage(1080, 1080);
+        });
+    
+        document.getElementById('resize-button-facebook').addEventListener('click', function () {
+            resizeImage(1200, 630);
+        });
+    
+        document.getElementById('resize-button-twitter').addEventListener('click', function () {
+            resizeImage(1200, 675);
+        });
+    
+        document.getElementById('resize-button-website').addEventListener('click', function () {
+            resizeImage(600, 300);
+        });
+    
+        function resizeImage(width, height) {
+            const uploadedImage = document.getElementById('uploaded-image');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const image = new Image();
+            image.src = uploadedImage.src;
+            image.onload = () => {
+                ctx.drawImage(image, 0, 0, width, height);
+                uploadedImage.src = canvas.toDataURL();
+            };
+        }
+    </script>
+</body>
+</html>
